@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --navy-bg: #071328;
+  --navy-surface: #0B1E38;
+  --navy-card: #0F2647;
+  --navy-border: #1E3E62;
+  --navy-hover: #17355B;
+  
+  --gold-primary: #F59E0B;
+  --gold-champagne: #FBBF24;
+  --gold-dark: #B45309;
+  --gold-muted: rgba(245, 158, 11, 0.15);
+
+  --accent-cyan: #38BDF8;
+  --accent-emerald: #10B981;
+  --accent-rose: #F43F5E;
+
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-subtle: #64748B;
+}
+
+body {
+  background-color: var(--navy-bg);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #071328;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E3E62;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #F59E0B;
+}
+
+/* Custom Glass & Fintech Utilities */
+.glass-panel {
+  background: rgba(15, 38, 71, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #1E3E62;
+}
+
+.glass-panel-hover:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.08);
+}
+
+.gold-glow {
+  box-shadow: 0 0 20px -3px rgba(245, 158, 11, 0.25);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #D97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navy-gradient-bg {
+  background: linear-gradient(180deg, #071328 0%, #0B1E38 100%);
+}
+
+.card-gradient {
+  background: linear-gradient(145deg, rgba(15, 38, 71, 0.9) 0%, rgba(11, 30, 56, 0.95) 100%);
+  border: 1px solid #1E3E62;
+}
