@@ -45,24 +45,29 @@ export class StorageService {
   // MARKET DATA (BHAVCOPY) CRUD
   // ============================================================================
 
-  public static async getMarketData(filters?: {
-    symbol?: MCXSymbol;
-    startDate?: string;
-    endDate?: string;
-    expiryDate?: string;
-  }): Promise<BhavcopyRecord[]> {
+  public static async getMarketData(
+    filters?: {
+      symbol?: MCXSymbol;
+      startDate?: string;
+      endDate?: string;
+      expiryDate?: string;
+    },
+    options?: { fallbackToLocalIfEmpty?: boolean }
+  ): Promise<BhavcopyRecord[]> {
     const supabase = getSupabaseClient();
     if (supabase) {
       try {
-        let query = supabase.from("market_data").select("*").order("trade_date", { ascending: true });
+        let query = supabase.from("market_data").select("*").order("trade_date", { ascending: false });
         if (filters?.symbol) query = query.eq("symbol", filters.symbol);
         if (filters?.startDate) query = query.gte("trade_date", filters.startDate);
         if (filters?.endDate) query = query.lte("trade_date", filters.endDate);
         if (filters?.expiryDate) query = query.eq("expiry_date", filters.expiryDate);
 
         const { data, error } = await query;
-        if (!error && data && data.length > 0) {
-          return data as BhavcopyRecord[];
+        if (!error && data) {
+          if (data.length > 0 || options?.fallbackToLocalIfEmpty === false) {
+            return data as BhavcopyRecord[];
+          }
         }
       } catch (err) {
         console.warn("Supabase market data query fallback:", err);
@@ -80,7 +85,124 @@ export class StorageService {
     if (filters?.endDate) records = records.filter((r) => r.trade_date <= filters.endDate!);
     if (filters?.expiryDate) records = records.filter((r) => r.expiry_date === filters.expiryDate);
 
-    return records.sort((a, b) => new Date(a.trade_date).getTime() - new Date(b.trade_date).getTime());
+    return records.sort((a, b) => new Date(b.trade_date).getTime() - new Date(a.trade_date).getTime());
+  }
+
+  public static async insertMarketDataRecord(
+    record: Omit<BhavcopyRecord, "id" | "created_at">
+  ): Promise<{ success: boolean; data?: BhavcopyRecord; error?: string }> {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return { success: false, error: "Supabase client is not configured. Check .env.local configuration." };
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("market_data")
+        .insert(record)
+        .select()
+        .single();
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true, data: data as BhavcopyRecord };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { success: false, error: msg };
+    }
+  }
+
+  public static async updateMarketDataRecord(
+    id: string,
+    updates: Partial<BhavcopyRecord>
+  ): Promise<{ success: boolean; data?: BhavcopyRecord; error?: string }> {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return { success: false, error: "Supabase client is not configured." };
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("market_data")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true, data: data as BhavcopyRecord };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { success: false, error: msg };
+    }
+  }
+
+  public static async deleteMarketDataRecord(
+    id: string
+  ): Promise<{ success: boolean; error?: string }> {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return { success: false, error: "Supabase client is not configured." };
+    }
+
+    try {
+      const { error } = await supabase.from("market_data").delete().eq("id", id);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { success: false, error: msg };
+    }
+  }
+
+  public static async seedVerifiedDataToSupabase(): Promise<{
+    success: boolean;
+    count: number;
+    error?: string;
+  }> {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return { success: false, count: 0, error: "Supabase client is not configured." };
+    }
+    try {
+      const records = BhavcopyParser.getVerifiedHistoricalDataset();
+      const chunkSize = 100;
+      let inserted = 0;
+      for (let i = 0; i < records.length; i += chunkSize) {
+        const chunk = records.slice(i, i + chunkSize);
+        const { error } = await supabase.from("market_data").upsert(chunk, {
+          onConflict: "trade_date,symbol,expiry_date",
+        });
+        if (error) {
+          return { success: false, count: inserted, error: error.message };
+        }
+        inserted += chunk.length;
+      }
+      return { success: true, count: inserted };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { success: false, count: 0, error: msg };
+    }
+  }
+
+  public static async clearMarketData(): Promise<{ success: boolean; error?: string }> {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return { success: false, error: "Supabase client is not configured." };
+    }
+    try {
+      const { error } = await supabase.from("market_data").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+      if (error) return { success: false, error: error.message };
+      return { success: true };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { success: false, error: msg };
+    }
   }
 
   public static async saveMarketData(records: BhavcopyRecord[]): Promise<{ saved: number; failed: number }> {

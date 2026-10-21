@@ -75,4 +75,12 @@ export class GoldNormalizer {
       karat_estimate: Math.round((targetPurity / 1000.0) * 24.0 * 10) / 10,
     };
   }
+
+
+  public static normalizePriceToBenchmark(rawPrice: number, symbol: MCXSymbol): number {
+    return this.normalizePrice(symbol, rawPrice);
+  }
 }
+
+export { GoldNormalizer as ContractNormalizer };
+

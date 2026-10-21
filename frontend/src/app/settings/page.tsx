@@ -249,19 +249,20 @@ ON CONFLICT (id) DO NOTHING;`;
 
           <div className="space-y-2.5 text-xs">
             <div className="flex items-center justify-between p-2 rounded bg-[#071328] border border-[#1E3E62]/60">
-              <span className="text-slate-400">NEXT_PUBLIC_SUPABASE_URL</span>
-              <span className="font-mono text-slate-200 truncate max-w-[220px]">
-                {config?.url || "Not Configured"}
+              <span className="text-slate-400">Database Connection</span>
+              <span className="font-mono text-emerald-400 font-semibold truncate max-w-[220px]">
+                {config?.isConfigured ? "✓ Connected (Cloud PostgreSQL)" : "Not Configured"}
               </span>
             </div>
 
             <div className="flex items-center justify-between p-2 rounded bg-[#071328] border border-[#1E3E62]/60">
-              <span className="text-slate-400">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>
+              <span className="text-slate-400">Database Access Key</span>
               <span className="font-mono text-slate-200">
-                {config?.hasKey ? "✓ Valid Key Detected" : "✗ Missing / Placeholder"}
+                {config?.hasKey ? "✓ Configured & Secured" : "✗ Missing"}
               </span>
             </div>
           </div>
+
 
           <p className="text-[11px] text-slate-400 leading-relaxed">
             {dbStatus?.connected
