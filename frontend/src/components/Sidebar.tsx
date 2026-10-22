@@ -29,8 +29,8 @@ export const Sidebar: React.FC = () => {
     { name: "Expiry & Roll Tracker", href: "/calendar", icon: Calendar },
     { name: "Walk-Forward Backtest", href: "/backtest", icon: FlaskConical },
     { name: "Bhavcopy Ingestion", href: "/data", icon: UploadCloud },
-    { name: "Supabase Setup", href: "/settings", icon: Database },
   ];
+
 
   const contracts = [
     { symbol: "GOLD", unit: "1 Kg (1000g)", quote: "₹/10g", purity: "995", color: "bg-amber-400" },

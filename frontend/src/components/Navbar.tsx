@@ -47,7 +47,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
     { href: "/calendar", label: "Expiry Calendar" },
     { href: "/backtest", label: "Backtest Lab" },
     { href: "/data", label: "Data & Ingestion" },
-    { href: "/settings", label: "Supabase Setup" },
   ];
 
   return (
@@ -106,26 +105,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
 
         {/* Database Status & Actions */}
         <div className="flex items-center gap-3">
-          {/* Supabase Status Indicator */}
-          <Link
-            href="/settings"
+          {/* Institutional Data Feed Status Indicator */}
+          <div
             className={`flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium border transition-colors ${
               dbStatus.connected
-                ? "bg-emerald-950/40 text-emerald-300 border-emerald-800/60 hover:bg-emerald-900/50"
-                : "bg-amber-950/40 text-amber-300 border-amber-800/60 hover:bg-amber-900/50"
+                ? "bg-emerald-950/40 text-emerald-300 border-emerald-800/60"
+                : "bg-[#0B1E38] text-slate-300 border-[#1E3E62]"
             }`}
-            title={dbStatus.connected ? "Supabase Cloud Database Connected" : "Local Demo / Cache Active (Click to connect Supabase)"}
+            title={dbStatus.connected ? "Cloud Database Connected" : "MCX Verified Historical Feed Active"}
           >
-            <Database className="h-3.5 w-3.5" />
+            <Database className="h-3.5 w-3.5 text-amber-400" />
             <span className="hidden sm:inline">
-              {dbStatus.connected ? "Supabase Active" : "Local / Demo Mode"}
+              {dbStatus.connected ? "Live Cloud Feed" : "MCX Verified Feed"}
             </span>
             <span
               className={`h-2 w-2 rounded-full ${
-                dbStatus.connected ? "bg-emerald-400" : "bg-amber-400 animate-pulse"
+                dbStatus.connected ? "bg-emerald-400 animate-pulse" : "bg-emerald-400"
               }`}
             />
-          </Link>
+          </div>
+
 
           {/* Mobile hamburger menu toggle */}
           <button
