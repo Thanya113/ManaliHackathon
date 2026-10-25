@@ -83,15 +83,15 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
   const hoveredPoint = hoverIndex !== null ? data[hoverIndex] : data[data.length - 1];
 
   return (
-    <div className="card-gradient rounded-xl border border-[#1E3E62] p-5 space-y-4">
+    <div className="card-gradient rounded-xl border border-[#E8E1D5] bg-white/95 p-5 space-y-4 shadow-sm">
       {/* Chart Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-white">{title}</h3>
-            <span className="text-xs text-amber-400 font-mono">({pairKey})</span>
+            <h3 className="text-sm font-bold text-slate-900">{title}</h3>
+            <span className="text-xs text-amber-700 font-mono font-semibold">({pairKey})</span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Statistical spread divergence from institutional carry equilibrium (₹ per 10 grams)
           </p>
         </div>
@@ -99,38 +99,38 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
         {/* Legend */}
         <div className="flex items-center gap-4 text-xs">
           <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-            <span className="text-slate-300 font-medium">Actual Spread</span>
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
+            <span className="text-slate-700 font-medium">Actual Spread</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-sky-400" />
-            <span className="text-slate-300 font-medium">Fair Value (Cost of Carry)</span>
+            <span className="h-2.5 w-2.5 rounded-full bg-sky-600" />
+            <span className="text-slate-700 font-medium">Fair Value (Cost of Carry)</span>
           </div>
         </div>
       </div>
 
       {/* Interactive Tooltip Status Strip */}
       {hoveredPoint && (
-        <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg bg-[#071328]/80 border border-[#1E3E62]/80 text-xs">
-          <div className="text-slate-400 font-medium">
-            Date: <span className="text-slate-200 font-semibold">{hoveredPoint.date}</span>
+        <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg bg-amber-50/70 border border-amber-200 text-xs shadow-xs">
+          <div className="text-slate-600 font-medium">
+            Date: <span className="text-slate-900 font-semibold">{hoveredPoint.date}</span>
           </div>
-          <div className="text-slate-400">
+          <div className="text-slate-600">
             Actual Spread:{" "}
-            <span className="text-amber-400 font-mono font-bold">₹{hoveredPoint.spread.toFixed(2)}/10g</span>
+            <span className="text-amber-800 font-mono font-bold">₹{hoveredPoint.spread.toFixed(2)}/10g</span>
           </div>
           {hoveredPoint.fairValue !== undefined && (
-            <div className="text-slate-400">
+            <div className="text-slate-600">
               Fair Value:{" "}
-              <span className="text-sky-400 font-mono font-bold">₹{hoveredPoint.fairValue.toFixed(2)}/10g</span>
+              <span className="text-sky-700 font-mono font-bold">₹{hoveredPoint.fairValue.toFixed(2)}/10g</span>
             </div>
           )}
           {hoveredPoint.zScore !== undefined && (
-            <div className="text-slate-400">
+            <div className="text-slate-600">
               Z-Score:{" "}
               <span
                 className={`font-mono font-bold ${
-                  Math.abs(hoveredPoint.zScore) >= 1.8 ? "text-rose-400" : "text-emerald-400"
+                  Math.abs(hoveredPoint.zScore) >= 1.8 ? "text-rose-600" : "text-emerald-700"
                 }`}
               >
                 {hoveredPoint.zScore >= 0 ? "+" : ""}
@@ -166,9 +166,9 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
                   y1={y}
                   x2={svgWidth - padRight}
                   y2={y}
-                  stroke="#1E3E62"
+                  stroke="#E2E8F0"
                   strokeDasharray="3 3"
-                  strokeOpacity="0.4"
+                  strokeOpacity="0.9"
                 />
                 <text
                   x={padLeft - 8}
@@ -194,7 +194,7 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
               stroke="#F43F5E"
               strokeDasharray="4 4"
               strokeWidth="1.5"
-              strokeOpacity="0.6"
+              strokeOpacity="0.7"
             />
           )}
 
@@ -202,14 +202,14 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
           <path
             d={fairPath}
             fill="none"
-            stroke="#38BDF8"
+            stroke="#0284C7"
             strokeWidth="2"
             strokeDasharray="4 2"
-            strokeOpacity="0.85"
+            strokeOpacity="0.9"
           />
 
           {/* Actual Spread Line (Amber Gold) */}
-          <path d={spreadPath} fill="none" stroke="#F59E0B" strokeWidth="2.5" />
+          <path d={spreadPath} fill="none" stroke="#D97706" strokeWidth="2.5" />
 
           {/* Hover Crosshair and Markers */}
           {hoverIndex !== null && (
@@ -219,7 +219,7 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
                 y1={padTop}
                 x2={getX(hoverIndex)}
                 y2={svgHeight - padBottom}
-                stroke="#F59E0B"
+                stroke="#D97706"
                 strokeWidth="1"
                 strokeDasharray="2 2"
               />
@@ -227,8 +227,8 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
                 cx={getX(hoverIndex)}
                 cy={getY(data[hoverIndex].spread)}
                 r="5"
-                fill="#F59E0B"
-                stroke="#071328"
+                fill="#D97706"
+                stroke="#FFFFFF"
                 strokeWidth="2"
               />
               {data[hoverIndex].fairValue !== undefined && (
@@ -236,8 +236,8 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
                   cx={getX(hoverIndex)}
                   cy={getY(data[hoverIndex].fairValue!)}
                   r="4"
-                  fill="#38BDF8"
-                  stroke="#071328"
+                  fill="#0284C7"
+                  stroke="#FFFFFF"
                   strokeWidth="2"
                 />
               )}
@@ -271,7 +271,7 @@ export const SpreadChart: React.FC<SpreadChartProps> = ({
                   key={idx}
                   x={getX(idx)}
                   y={svgHeight - padBottom + 18}
-                  fill="#94A3B8"
+                  fill="#64748B"
                   fontSize="10"
                   textAnchor="middle"
                 >

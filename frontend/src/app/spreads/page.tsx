@@ -155,18 +155,18 @@ export default function SpreadsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#1E3E62]/60 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E8E1D5] pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="rounded-full bg-amber-400/10 px-2.5 py-0.5 text-xs font-bold text-amber-300 border border-amber-400/20">
+            <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-bold text-amber-800 border border-amber-400/50 shadow-xs">
               MCX QUANT LAB
             </span>
-            <span className="text-xs text-slate-400">Institutional Fair-Value Engine</span>
+            <span className="text-xs text-slate-500 font-medium">Institutional Fair-Value Engine</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
             Relative-Value Spread Analyzer
           </h1>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-slate-600 mt-1">
             Analyze calendar spreads, cross-contract basis, and theoretical cost of carry fair value across all MCX gold expiries.
           </p>
         </div>
@@ -185,8 +185,8 @@ export default function SpreadsPage() {
               onClick={() => handlePairChange(p.key)}
               className={`rounded-lg px-3 py-1.5 font-semibold border transition-all ${
                 selectedPairKey === p.key
-                  ? "bg-amber-400/20 text-amber-300 border-amber-400/40 shadow-sm"
-                  : "bg-[#0B1E38] text-slate-300 border-[#1E3E62] hover:bg-[#0F2647] hover:text-white"
+                  ? "bg-amber-500 text-white border-amber-500 shadow-sm"
+                  : "bg-white text-slate-700 border-[#E8E1D5] hover:bg-amber-50/70 hover:text-slate-900 shadow-xs"
               }`}
             >
               {p.label}
@@ -196,22 +196,22 @@ export default function SpreadsPage() {
       </div>
 
       {/* Interactive Cost of Carry Sliders */}
-      <div className="card-gradient rounded-xl border border-[#1E3E62] p-5 space-y-4">
-        <div className="flex items-center justify-between border-b border-[#1E3E62]/60 pb-3">
+      <div className="card-gradient rounded-xl border border-[#E8E1D5] bg-white/95 p-5 space-y-4 shadow-sm">
+        <div className="flex items-center justify-between border-b border-[#E8E1D5] pb-3">
           <div className="flex items-center gap-2">
-            <Sliders className="h-4 w-4 text-amber-400" />
-            <h3 className="text-sm font-bold text-white">Cost of Carry Model Parameters</h3>
+            <Sliders className="h-4 w-4 text-amber-600" />
+            <h3 className="text-sm font-bold text-slate-900">Cost of Carry Model Parameters</h3>
           </div>
-          <span className="text-xs text-slate-400 font-mono">
-            Model: <code className="text-amber-300">F = S × e^((r + c - y) × ΔT)</code>
+          <span className="text-xs text-slate-500 font-mono">
+            Model: <code className="text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">F = S × e^((r + c - y) × ΔT)</code>
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-300 font-medium">Risk-Free Rate (RBI Repo Rate)</span>
-              <span className="font-mono text-amber-400 font-bold text-sm">{repoRate.toFixed(2)}% p.a.</span>
+              <span className="text-slate-700 font-medium">Risk-Free Rate (RBI Repo Rate)</span>
+              <span className="font-mono text-amber-800 font-bold text-sm">{repoRate.toFixed(2)}% p.a.</span>
             </div>
             <input
               type="range"
@@ -220,19 +220,19 @@ export default function SpreadsPage() {
               step="0.25"
               value={repoRate}
               onChange={(e) => handleRepoChange(parseFloat(e.target.value))}
-              className="w-full h-1.5 bg-[#071328] rounded-lg appearance-none cursor-pointer accent-amber-400"
+              className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
             />
             <div className="flex justify-between text-[10px] text-slate-500 mt-1">
               <span>4.00%</span>
-              <span className="text-amber-400 font-semibold">Current RBI: 6.50%</span>
+              <span className="text-amber-800 font-semibold">Current RBI: 6.50%</span>
               <span>10.00%</span>
             </div>
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-300 font-medium">Vaulted Storage & Insurance Cost</span>
-              <span className="font-mono text-amber-400 font-bold text-sm">{storageCost.toFixed(2)}% p.a.</span>
+              <span className="text-slate-700 font-medium">Vaulted Storage & Insurance Cost</span>
+              <span className="font-mono text-amber-800 font-bold text-sm">{storageCost.toFixed(2)}% p.a.</span>
             </div>
             <input
               type="range"
@@ -241,11 +241,11 @@ export default function SpreadsPage() {
               step="0.05"
               value={storageCost}
               onChange={(e) => handleStorageChange(parseFloat(e.target.value))}
-              className="w-full h-1.5 bg-[#071328] rounded-lg appearance-none cursor-pointer accent-amber-400"
+              className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
             />
             <div className="flex justify-between text-[10px] text-slate-500 mt-1">
               <span>0.10%</span>
-              <span className="text-amber-400 font-semibold">Institutional: 0.25%</span>
+              <span className="text-amber-800 font-semibold">Institutional: 0.25%</span>
               <span>1.00%</span>
             </div>
           </div>
@@ -270,8 +270,8 @@ export default function SpreadsPage() {
       {/* Anomaly Alerts Panel */}
       {anomalies.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm font-bold text-white">
-            <AlertTriangle className="h-4 w-4 text-amber-400" />
+          <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
             <span>Active Anomaly & Dislocation Alerts ({anomalies.length})</span>
           </div>
 
@@ -279,24 +279,24 @@ export default function SpreadsPage() {
             {anomalies.map((a, i) => (
               <div
                 key={i}
-                className={`p-4 rounded-xl border text-xs space-y-1.5 ${
+                className={`p-4 rounded-xl border text-xs space-y-1.5 shadow-xs ${
                   a.severity === "CRITICAL"
-                    ? "bg-rose-500/10 border-rose-500/30 text-rose-300"
+                    ? "bg-rose-50 border-rose-300 text-rose-950"
                     : a.severity === "HIGH"
-                    ? "bg-orange-500/10 border-orange-500/30 text-orange-300"
+                    ? "bg-orange-50 border-orange-300 text-orange-950"
                     : a.severity === "MODERATE"
-                    ? "bg-amber-500/10 border-amber-500/30 text-amber-300"
-                    : "bg-sky-500/10 border-sky-500/30 text-sky-300"
+                    ? "bg-amber-50 border-amber-300 text-amber-950"
+                    : "bg-sky-50 border-sky-300 text-sky-950"
                 }`}
               >
                 <div className="flex items-center justify-between font-bold">
                   <span>{a.title}</span>
-                  <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded bg-[#071328] border border-current">
+                  <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded bg-white border border-current shadow-2xs">
                     {a.severity}
                   </span>
                 </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">{a.description}</p>
-                <div className="text-[10px] font-mono font-semibold pt-1 text-slate-400">{a.metric}</div>
+                <p className="text-slate-700 text-[11px] leading-relaxed">{a.description}</p>
+                <div className="text-[10px] font-mono font-semibold pt-1 text-slate-600">{a.metric}</div>
               </div>
             ))}
           </div>

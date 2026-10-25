@@ -73,41 +73,41 @@ export const NormalizedPriceChart: React.FC<NormalizedPriceChartProps> = ({
   const hoveredPoint = hoverIndex !== null ? data[hoverIndex] : data[data.length - 1];
 
   return (
-    <div className="card-gradient rounded-xl border border-[#1E3E62] p-5 space-y-4">
+    <div className="card-gradient rounded-xl border border-[#E8E1D5] bg-white/95 p-5 space-y-4 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="text-sm font-bold text-white">Normalized Futures Price Series</h3>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <h3 className="text-sm font-bold text-slate-900">Normalized Futures Price Series</h3>
+          <p className="text-xs text-slate-500 mt-0.5">
             Synchronized comparison in standardized benchmark: ₹ per 10 grams @ 995 purity
           </p>
         </div>
 
         <div className="flex items-center gap-4 text-xs">
           <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-            <span className="text-slate-300 font-medium">{leg1Name}</span>
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
+            <span className="text-slate-700 font-medium">{leg1Name}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-cyan-400" />
-            <span className="text-slate-300 font-medium">{leg2Name}</span>
+            <span className="h-2.5 w-2.5 rounded-full bg-sky-600" />
+            <span className="text-slate-700 font-medium">{leg2Name}</span>
           </div>
         </div>
       </div>
 
       {hoveredPoint && (
-        <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg bg-[#071328]/80 border border-[#1E3E62]/80 text-xs">
-          <div className="text-slate-400">
-            Date: <span className="text-slate-200 font-semibold">{hoveredPoint.date}</span>
+        <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg bg-amber-50/70 border border-amber-200 text-xs shadow-xs">
+          <div className="text-slate-600 font-medium">
+            Date: <span className="text-slate-900 font-semibold">{hoveredPoint.date}</span>
           </div>
-          <div className="text-slate-400">
-            {leg1Name}: <span className="text-amber-400 font-mono font-bold">₹{hoveredPoint.p1Norm.toLocaleString()}</span>
+          <div className="text-slate-600">
+            {leg1Name}: <span className="text-amber-800 font-mono font-bold">₹{hoveredPoint.p1Norm.toLocaleString()}</span>
           </div>
-          <div className="text-slate-400">
-            {leg2Name}: <span className="text-cyan-400 font-mono font-bold">₹{hoveredPoint.p2Norm.toLocaleString()}</span>
+          <div className="text-slate-600">
+            {leg2Name}: <span className="text-sky-700 font-mono font-bold">₹{hoveredPoint.p2Norm.toLocaleString()}</span>
           </div>
-          <div className="text-slate-400">
+          <div className="text-slate-600">
             Spread:{" "}
-            <span className="text-emerald-400 font-mono font-bold">
+            <span className="text-emerald-700 font-mono font-bold">
               +₹{(hoveredPoint.p2Norm - hoveredPoint.p1Norm).toFixed(2)}/10g
             </span>
           </div>
@@ -131,9 +131,9 @@ export const NormalizedPriceChart: React.FC<NormalizedPriceChartProps> = ({
                   y1={y}
                   x2={svgWidth - padRight}
                   y2={y}
-                  stroke="#1E3E62"
+                  stroke="#E2E8F0"
                   strokeDasharray="3 3"
-                  strokeOpacity="0.4"
+                  strokeOpacity="0.9"
                 />
                 <text
                   x={padLeft - 8}
@@ -149,11 +149,11 @@ export const NormalizedPriceChart: React.FC<NormalizedPriceChartProps> = ({
             );
           })}
 
-          {/* Leg 2 Line (Cyan) */}
-          <path d={pathP2} fill="none" stroke="#38BDF8" strokeWidth="2.5" />
+          {/* Leg 2 Line (Sky Blue) */}
+          <path d={pathP2} fill="none" stroke="#0284C7" strokeWidth="2.5" />
 
-          {/* Leg 1 Line (Amber) */}
-          <path d={pathP1} fill="none" stroke="#F59E0B" strokeWidth="2.5" />
+          {/* Leg 1 Line (Amber Gold) */}
+          <path d={pathP1} fill="none" stroke="#D97706" strokeWidth="2.5" />
 
           {/* Hover effects */}
           {hoverIndex !== null && (
@@ -163,7 +163,7 @@ export const NormalizedPriceChart: React.FC<NormalizedPriceChartProps> = ({
                 y1={padTop}
                 x2={getX(hoverIndex)}
                 y2={svgHeight - padBottom}
-                stroke="#94A3B8"
+                stroke="#64748B"
                 strokeWidth="1"
                 strokeDasharray="2 2"
               />
@@ -171,16 +171,16 @@ export const NormalizedPriceChart: React.FC<NormalizedPriceChartProps> = ({
                 cx={getX(hoverIndex)}
                 cy={getY(data[hoverIndex].p1Norm)}
                 r="5"
-                fill="#F59E0B"
-                stroke="#071328"
+                fill="#D97706"
+                stroke="#FFFFFF"
                 strokeWidth="2"
               />
               <circle
                 cx={getX(hoverIndex)}
                 cy={getY(data[hoverIndex].p2Norm)}
                 r="5"
-                fill="#38BDF8"
-                stroke="#071328"
+                fill="#0284C7"
+                stroke="#FFFFFF"
                 strokeWidth="2"
               />
             </g>
@@ -213,7 +213,7 @@ export const NormalizedPriceChart: React.FC<NormalizedPriceChartProps> = ({
                   key={idx}
                   x={getX(idx)}
                   y={svgHeight - padBottom + 18}
-                  fill="#94A3B8"
+                  fill="#64748B"
                   fontSize="10"
                   textAnchor="middle"
                 >

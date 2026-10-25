@@ -114,19 +114,19 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
   };
 
   return (
-    <div className="card-gradient rounded-xl border border-[#1E3E62] p-5 space-y-6">
+    <div className="card-gradient rounded-xl border border-[#E8E1D5] bg-white/95 p-5 space-y-6 shadow-sm">
       {/* Header and Actions */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#1E3E62]/60 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E8E1D5] pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-bold text-white tracking-tight">{report.strategy_name}</h3>
-            <span className="rounded-full bg-amber-400/10 px-2.5 py-0.5 text-xs font-mono font-semibold text-amber-300 border border-amber-400/20">
+            <h3 className="text-base font-bold text-slate-900 tracking-tight">{report.strategy_name}</h3>
+            <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-mono font-semibold text-amber-800 border border-amber-400/50 shadow-xs">
               {report.pair_key}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Backtest Range: <span className="text-slate-300">{report.start_date}</span> to{" "}
-            <span className="text-slate-300">{report.end_date}</span> | Zero Look-Ahead Bias Verified
+          <p className="text-xs text-slate-500 mt-1">
+            Backtest Range: <span className="text-slate-700 font-medium">{report.start_date}</span> to{" "}
+            <span className="text-slate-700 font-medium">{report.end_date}</span> | Zero Look-Ahead Bias Verified
           </p>
         </div>
 
@@ -135,7 +135,7 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
             <button
               onClick={onSaveToSupabase}
               disabled={isSaving}
-              className="rounded-lg bg-amber-500/20 px-3 py-1.5 text-xs font-semibold text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition-colors disabled:opacity-50"
+              className="rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-600 transition-colors shadow-xs disabled:opacity-50"
             >
               {isSaving ? "Saving to Supabase..." : "Save Report to Supabase"}
             </button>
@@ -143,9 +143,9 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
 
           <button
             onClick={exportCSV}
-            className="flex items-center gap-1.5 rounded-lg bg-[#0B1E38] px-3 py-1.5 text-xs font-medium text-slate-200 border border-[#1E3E62] hover:bg-[#0F2647] transition-colors"
+            className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-slate-700 border border-[#E8E1D5] hover:bg-amber-50/70 transition-colors shadow-xs"
           >
-            <Download className="h-3.5 w-3.5 text-amber-400" />
+            <Download className="h-3.5 w-3.5 text-amber-600" />
             <span>Export Trades</span>
           </button>
         </div>
@@ -153,76 +153,76 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
 
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-        <div className="p-3.5 rounded-xl bg-[#071328]/80 border border-[#1E3E62]">
-          <span className="text-[11px] text-slate-400 block">Net Strategy Return</span>
+        <div className="p-3.5 rounded-xl bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+          <span className="text-[11px] text-slate-500 block">Net Strategy Return</span>
           <span
             className={`text-lg font-bold font-mono mt-0.5 block ${
-              report.net_return_pct >= 0 ? "text-emerald-400" : "text-rose-400"
+              report.net_return_pct >= 0 ? "text-emerald-700" : "text-rose-700"
             }`}
           >
             {report.net_return_pct >= 0 ? "+" : ""}
             {report.net_return_pct.toFixed(2)}%
           </span>
-          <span className="text-[10px] text-slate-400 font-mono">
+          <span className="text-[10px] text-slate-500 font-mono">
             {report.net_profit_inr >= 0 ? "+₹" : "-₹"}
             {Math.abs(report.net_profit_inr).toLocaleString()}
           </span>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#071328]/80 border border-[#1E3E62]">
-          <span className="text-[11px] text-slate-400 block">Buy & Hold Baseline</span>
+        <div className="p-3.5 rounded-xl bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+          <span className="text-[11px] text-slate-500 block">Buy & Hold Baseline</span>
           <span
             className={`text-lg font-bold font-mono mt-0.5 block ${
-              report.baseline_return_pct >= 0 ? "text-slate-200" : "text-rose-400"
+              report.baseline_return_pct >= 0 ? "text-slate-900" : "text-rose-700"
             }`}
           >
             {report.baseline_return_pct >= 0 ? "+" : ""}
             {report.baseline_return_pct.toFixed(2)}%
           </span>
-          <span className="text-[10px] text-slate-400">Front Roll Benchmark</span>
+          <span className="text-[10px] text-slate-500">Front Roll Benchmark</span>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#071328]/80 border border-[#1E3E62]">
-          <span className="text-[11px] text-slate-400 block">Sharpe Ratio (Rf 6.5%)</span>
-          <span className="text-lg font-bold font-mono text-amber-400 mt-0.5 block">
+        <div className="p-3.5 rounded-xl bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+          <span className="text-[11px] text-slate-500 block">Sharpe Ratio (Rf 6.5%)</span>
+          <span className="text-lg font-bold font-mono text-amber-800 mt-0.5 block">
             {report.sharpe_ratio.toFixed(2)}
           </span>
-          <span className="text-[10px] text-slate-400 font-mono">Sortino: {report.sortino_ratio.toFixed(2)}</span>
+          <span className="text-[10px] text-slate-500 font-mono">Sortino: {report.sortino_ratio.toFixed(2)}</span>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#071328]/80 border border-[#1E3E62]">
-          <span className="text-[11px] text-slate-400 block">Max Drawdown</span>
-          <span className="text-lg font-bold font-mono text-rose-400 mt-0.5 block">
+        <div className="p-3.5 rounded-xl bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+          <span className="text-[11px] text-slate-500 block">Max Drawdown</span>
+          <span className="text-lg font-bold font-mono text-rose-700 mt-0.5 block">
             -{report.max_drawdown_pct.toFixed(2)}%
           </span>
-          <span className="text-[10px] text-slate-400 font-mono">-₹{report.max_drawdown_inr.toLocaleString()}</span>
+          <span className="text-[10px] text-slate-500 font-mono">-₹{report.max_drawdown_inr.toLocaleString()}</span>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#071328]/80 border border-[#1E3E62]">
-          <span className="text-[11px] text-slate-400 block">Win Rate</span>
-          <span className="text-lg font-bold font-mono text-emerald-400 mt-0.5 block">
+        <div className="p-3.5 rounded-xl bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+          <span className="text-[11px] text-slate-500 block">Win Rate</span>
+          <span className="text-lg font-bold font-mono text-emerald-700 mt-0.5 block">
             {report.win_rate_pct.toFixed(1)}%
           </span>
-          <span className="text-[10px] text-slate-400">
+          <span className="text-[10px] text-slate-500">
             {report.winning_trades}W / {report.losing_trades}L ({report.total_trades} trades)
           </span>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#071328]/80 border border-[#1E3E62]">
-          <span className="text-[11px] text-slate-400 block">Friction Paid (Fees)</span>
-          <span className="text-lg font-bold font-mono text-slate-300 mt-0.5 block">
+        <div className="p-3.5 rounded-xl bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+          <span className="text-[11px] text-slate-500 block">Friction Paid (Fees)</span>
+          <span className="text-lg font-bold font-mono text-slate-800 mt-0.5 block">
             ₹{report.total_friction_paid_inr.toLocaleString()}
           </span>
-          <span className="text-[10px] text-slate-400 font-mono">PF: {report.profit_factor.toFixed(2)}</span>
+          <span className="text-[10px] text-slate-500 font-mono">PF: {report.profit_factor.toFixed(2)}</span>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-[#1E3E62] flex items-center gap-4 text-xs font-semibold">
+      <div className="border-b border-[#E8E1D5] flex items-center gap-4 text-xs font-semibold">
         <button
           onClick={() => setActiveTab("chart")}
           className={`pb-2.5 transition-colors ${
-            activeTab === "chart" ? "border-b-2 border-amber-400 text-amber-400" : "text-slate-400 hover:text-slate-200"
+            activeTab === "chart" ? "border-b-2 border-amber-600 text-amber-800" : "text-slate-500 hover:text-slate-800"
           }`}
         >
           Equity Curve & Baseline
@@ -230,7 +230,7 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
         <button
           onClick={() => setActiveTab("trades")}
           className={`pb-2.5 transition-colors ${
-            activeTab === "trades" ? "border-b-2 border-amber-400 text-amber-400" : "text-slate-400 hover:text-slate-200"
+            activeTab === "trades" ? "border-b-2 border-amber-600 text-amber-800" : "text-slate-500 hover:text-slate-800"
           }`}
         >
           Executed Trades Log ({report.trade_logs.length})
@@ -238,7 +238,7 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
         <button
           onClick={() => setActiveTab("audit")}
           className={`pb-2.5 transition-colors ${
-            activeTab === "audit" ? "border-b-2 border-amber-400 text-amber-400" : "text-slate-400 hover:text-slate-200"
+            activeTab === "audit" ? "border-b-2 border-amber-600 text-amber-800" : "text-slate-500 hover:text-slate-800"
           }`}
         >
           Data Quality & Bias Audit
@@ -251,23 +251,23 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-                <span className="text-slate-300 font-medium">Net Strategy Equity (After Costs)</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-600" />
+                <span className="text-slate-700 font-medium">Net Strategy Equity (After Costs)</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-                <span className="text-slate-300 font-medium">Gross Strategy</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
+                <span className="text-slate-700 font-medium">Gross Strategy</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-slate-500" />
-                <span className="text-slate-300 font-medium">Buy & Hold Front Contract</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-400" />
+                <span className="text-slate-700 font-medium">Buy & Hold Front Contract</span>
               </div>
             </div>
 
             {hoveredPoint && (
-              <div className="font-mono text-slate-300">
-                {hoveredPoint.date}: <span className="text-emerald-400 font-bold">₹{hoveredPoint.strategy_equity.toLocaleString()}</span>{" "}
-                <span className="text-slate-500">|</span> DD: <span className="text-rose-400">-{hoveredPoint.drawdown_pct}%</span>
+              <div className="font-mono text-slate-700">
+                {hoveredPoint.date}: <span className="text-emerald-700 font-bold">₹{hoveredPoint.strategy_equity.toLocaleString()}</span>{" "}
+                <span className="text-slate-400">|</span> DD: <span className="text-rose-700 font-semibold">-{hoveredPoint.drawdown_pct}%</span>
               </div>
             )}
           </div>
@@ -289,9 +289,9 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
                       y1={y}
                       x2={svgWidth - padRight}
                       y2={y}
-                      stroke="#1E3E62"
+                      stroke="#E2E8F0"
                       strokeDasharray="3 3"
-                      strokeOpacity="0.4"
+                      strokeOpacity="0.9"
                     />
                     <text
                       x={padLeft - 8}
@@ -308,13 +308,13 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
               })}
 
               {/* Baseline Curve (Slate) */}
-              <path d={pathBaseline} fill="none" stroke="#64748B" strokeWidth="1.5" strokeDasharray="3 3" />
+              <path d={pathBaseline} fill="none" stroke="#94A3B8" strokeWidth="1.5" strokeDasharray="3 3" />
 
               {/* Gross Equity (Amber) */}
-              <path d={pathGross} fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeOpacity="0.6" />
+              <path d={pathGross} fill="none" stroke="#D97706" strokeWidth="1.5" strokeOpacity="0.6" />
 
               {/* Net Strategy Equity (Emerald) */}
-              <path d={pathNet} fill="none" stroke="#10B981" strokeWidth="2.5" />
+              <path d={pathNet} fill="none" stroke="#059669" strokeWidth="2.5" />
 
               {/* Hover vertical rule */}
               {hoverIdx !== null && (
@@ -324,7 +324,7 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
                     y1={padTop}
                     x2={getX(hoverIdx)}
                     y2={svgHeight - padBottom}
-                    stroke="#10B981"
+                    stroke="#059669"
                     strokeWidth="1"
                     strokeDasharray="2 2"
                   />
@@ -332,8 +332,8 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
                     cx={getX(hoverIdx)}
                     cy={getY(eq[hoverIdx].strategy_equity)}
                     r="5"
-                    fill="#10B981"
-                    stroke="#071328"
+                    fill="#059669"
+                    stroke="#FFFFFF"
                     strokeWidth="2"
                   />
                 </g>
@@ -366,7 +366,7 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
                       key={idx}
                       x={getX(idx)}
                       y={svgHeight - padBottom + 18}
-                      fill="#94A3B8"
+                      fill="#64748B"
                       fontSize="10"
                       textAnchor="middle"
                     >
@@ -384,13 +384,13 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
       {activeTab === "trades" && (
         <div className="overflow-x-auto">
           {report.trade_logs.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-xs">
+            <div className="p-8 text-center text-slate-500 text-xs">
               No trades met the statistical entry and cost hurdle filters during this period.
             </div>
           ) : (
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-[#1E3E62] text-slate-400 font-semibold bg-[#071328]/60">
+                <tr className="border-b border-[#E8E1D5] text-slate-600 font-semibold bg-amber-50/70">
                   <th className="py-2.5 px-3">#</th>
                   <th className="py-2.5 px-3">Direction</th>
                   <th className="py-2.5 px-3">Entry Date</th>
@@ -403,36 +403,36 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
                   <th className="py-2.5 px-3">Exit Reason</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1E3E62]/40 font-mono">
+              <tbody className="divide-y divide-[#E8E1D5] font-mono">
                 {report.trade_logs.map((t: TradeLogEntry) => (
-                  <tr key={t.trade_id} className="hover:bg-[#0F2647]/50 transition-colors">
-                    <td className="py-2.5 px-3 text-slate-400">{t.trade_id}</td>
+                  <tr key={t.trade_id} className="hover:bg-amber-50/50 transition-colors">
+                    <td className="py-2.5 px-3 text-slate-500">{t.trade_id}</td>
                     <td className="py-2.5 px-3">
                       <span
                         className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
                           t.direction === "LONG_SPREAD"
-                            ? "bg-emerald-500/10 text-emerald-400"
-                            : "bg-rose-500/10 text-rose-400"
+                            ? "bg-emerald-50 text-emerald-700 border border-emerald-300"
+                            : "bg-rose-50 text-rose-700 border border-rose-300"
                         }`}
                       >
                         {t.direction.replace("_SPREAD", "")}
                       </span>
                     </td>
-                    <td className="py-2.5 px-3 text-slate-300 font-sans">{t.entry_date}</td>
-                    <td className="py-2.5 px-3 text-slate-200">₹{t.entry_spread.toFixed(2)}</td>
-                    <td className="py-2.5 px-3 text-slate-300 font-sans">{t.exit_date}</td>
-                    <td className="py-2.5 px-3 text-slate-200">₹{t.exit_spread.toFixed(2)}</td>
-                    <td className="py-2.5 px-3 text-slate-400 font-sans">{t.holding_days}d</td>
-                    <td className="py-2.5 px-3 text-slate-400">₹{t.friction_paid_inr}</td>
+                    <td className="py-2.5 px-3 text-slate-700 font-sans">{t.entry_date}</td>
+                    <td className="py-2.5 px-3 text-slate-900">₹{t.entry_spread.toFixed(2)}</td>
+                    <td className="py-2.5 px-3 text-slate-700 font-sans">{t.exit_date}</td>
+                    <td className="py-2.5 px-3 text-slate-900">₹{t.exit_spread.toFixed(2)}</td>
+                    <td className="py-2.5 px-3 text-slate-600 font-sans">{t.holding_days}d</td>
+                    <td className="py-2.5 px-3 text-slate-600">₹{t.friction_paid_inr}</td>
                     <td
                       className={`py-2.5 px-3 font-bold ${
-                        t.net_pnl_inr >= 0 ? "text-emerald-400" : "text-rose-400"
+                        t.net_pnl_inr >= 0 ? "text-emerald-700" : "text-rose-700"
                       }`}
                     >
                       {t.net_pnl_inr >= 0 ? "+" : ""}₹{t.net_pnl_inr.toLocaleString()}
                     </td>
                     <td className="py-2.5 px-3 font-sans">
-                      <span className="rounded bg-[#071328] px-2 py-0.5 text-[10px] text-slate-300 border border-[#1E3E62]">
+                      <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] text-slate-700 border border-slate-200">
                         {t.exit_reason}
                       </span>
                     </td>
@@ -446,30 +446,30 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
 
       {/* Tab 3: Data Quality & Bias Audit */}
       {activeTab === "audit" && (
-        <div className="rounded-xl border border-[#1E3E62] bg-[#071328]/80 p-5 space-y-4 text-xs">
-          <div className="flex items-center gap-2 text-sm font-bold text-white">
-            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+        <div className="rounded-xl border border-[#E8E1D5] bg-amber-50/40 p-5 space-y-4 text-xs shadow-2xs">
+          <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
             <span>Walk-Forward Backtesting Bias Integrity Report</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-3">
               <div className="flex items-start gap-2.5">
-                <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-slate-200 block">Strict Zero Look-Ahead Bias</span>
-                  <p className="text-slate-400 text-[11px] mt-0.5 leading-relaxed">
+                  <span className="font-semibold text-slate-900 block">Strict Zero Look-Ahead Bias</span>
+                  <p className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
                     Rolling Z-Score parameter estimations (mean and standard deviation) are strictly calculated using
-                    historical bars up to bar <code className="text-amber-400">t - 1</code>. No forward data leakage exists.
+                    historical bars up to bar <code className="text-amber-800 font-semibold bg-amber-100/70 px-1 py-0.5 rounded">t - 1</code>. No forward data leakage exists.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-2.5">
-                <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-slate-200 block">Tender Period Enforcement</span>
-                  <p className="text-slate-400 text-[11px] mt-0.5 leading-relaxed">
+                  <span className="font-semibold text-slate-900 block">Tender Period Enforcement</span>
+                  <p className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
                     All spread entries are blocked within 5 trading days of front month expiry. Open positions are
                     forced to roll or close before the physical delivery notice window.
                   </p>
@@ -479,10 +479,10 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
 
             <div className="space-y-3">
               <div className="flex items-start gap-2.5">
-                <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-slate-200 block">Realistic Institutional Frictions</span>
-                  <p className="text-slate-400 text-[11px] mt-0.5 leading-relaxed">
+                  <span className="font-semibold text-slate-900 block">Realistic Institutional Frictions</span>
+                  <p className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
                     MCX turnover charges (0.0021%), CTT (0.01% on sell), GST (18%), stamp duty (0.002%), brokerage, and
                     bid-ask slippage are subtracted on every execution leg.
                   </p>
@@ -490,10 +490,10 @@ export const BacktestResultsView: React.FC<BacktestResultsViewProps> = ({
               </div>
 
               <div className="flex items-start gap-2.5">
-                <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-slate-200 block">Data Continuity Audit</span>
-                  <p className="text-slate-400 text-[11px] mt-0.5 leading-relaxed">
+                  <span className="font-semibold text-slate-900 block">Data Continuity Audit</span>
+                  <p className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
                     Total synchronized bars: {report.data_quality_audit.total_bars}. Zero-volume or halted contract bars
                     filtered out: {report.data_quality_audit.zero_volume_filtered}.
                   </p>

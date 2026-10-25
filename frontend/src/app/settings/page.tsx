@@ -198,18 +198,18 @@ ON CONFLICT (id) DO NOTHING;`;
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#1E3E62]/60 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E8E1D5] pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="rounded-full bg-amber-400/10 px-2.5 py-0.5 text-xs font-bold text-amber-300 border border-amber-400/20">
+            <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-bold text-amber-800 border border-amber-400/50 shadow-xs">
               SUPABASE HOSTED POSTGRES
             </span>
-            <span className="text-xs text-slate-400">Zero Infrastructure Friction</span>
+            <span className="text-xs text-slate-500 font-medium">Zero Infrastructure Friction</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
             Supabase Setup & Diagnostics
           </h1>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-slate-600 mt-1">
             Connect your hosted PostgreSQL database using environment variables, execute the single copy-paste setup script,
             and inspect live database tables.
           </p>
@@ -218,9 +218,9 @@ ON CONFLICT (id) DO NOTHING;`;
         <button
           onClick={runDiagnostic}
           disabled={isTesting}
-          className="flex items-center gap-2 rounded-lg bg-[#0F2647] px-3.5 py-2 text-xs font-semibold text-amber-300 border border-[#1E3E62] hover:bg-[#17355B] transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 rounded-lg bg-amber-50 px-3.5 py-2 text-xs font-semibold text-amber-900 border border-amber-300 hover:bg-amber-100/70 transition-colors disabled:opacity-50 shadow-xs"
         >
-          <RefreshCw className={`h-4 w-4 ${isTesting ? "animate-spin" : ""}`} />
+          <RefreshCw className={`h-4 w-4 text-amber-600 ${isTesting ? "animate-spin" : ""}`} />
           <span>Re-test Connection</span>
         </button>
       </div>
@@ -228,19 +228,19 @@ ON CONFLICT (id) DO NOTHING;`;
       {/* Diagnostics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Environment Status Card */}
-        <div className="card-gradient rounded-xl border border-[#1E3E62] p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#1E3E62]/60 pb-3">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Database className="h-4 w-4 text-amber-400" />
+        <div className="card-gradient rounded-xl border border-[#E8E1D5] bg-white/95 p-5 space-y-4 shadow-sm">
+          <div className="flex items-center justify-between border-b border-[#E8E1D5] pb-3">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <Database className="h-4 w-4 text-amber-600" />
               Environment Variables Status
             </h3>
             {dbStatus?.connected ? (
-              <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold text-emerald-400 border border-emerald-500/30">
+              <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 border border-emerald-300">
                 <CheckCircle2 className="h-3.5 w-3.5" />
                 Connected
               </span>
             ) : (
-              <span className="flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-xs font-bold text-amber-400 border border-amber-500/30">
+              <span className="flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-bold text-amber-800 border border-amber-300">
                 <AlertCircle className="h-3.5 w-3.5" />
                 Local Fallback Active
               </span>
@@ -248,23 +248,22 @@ ON CONFLICT (id) DO NOTHING;`;
           </div>
 
           <div className="space-y-2.5 text-xs">
-            <div className="flex items-center justify-between p-2 rounded bg-[#071328] border border-[#1E3E62]/60">
-              <span className="text-slate-400">Database Connection</span>
-              <span className="font-mono text-emerald-400 font-semibold truncate max-w-[220px]">
+            <div className="flex items-center justify-between p-2 rounded bg-amber-50/50 border border-[#E8E1D5]">
+              <span className="text-slate-600">Database Connection</span>
+              <span className="font-mono text-emerald-700 font-semibold truncate max-w-[220px]">
                 {config?.isConfigured ? "✓ Connected (Cloud PostgreSQL)" : "Not Configured"}
               </span>
             </div>
 
-            <div className="flex items-center justify-between p-2 rounded bg-[#071328] border border-[#1E3E62]/60">
-              <span className="text-slate-400">Database Access Key</span>
-              <span className="font-mono text-slate-200">
+            <div className="flex items-center justify-between p-2 rounded bg-amber-50/50 border border-[#E8E1D5]">
+              <span className="text-slate-600">Database Access Key</span>
+              <span className="font-mono text-slate-800 font-semibold">
                 {config?.hasKey ? "✓ Configured & Secured" : "✗ Missing"}
               </span>
             </div>
           </div>
 
-
-          <p className="text-[11px] text-slate-400 leading-relaxed">
+          <p className="text-[11px] text-slate-500 leading-relaxed">
             {dbStatus?.connected
               ? "All contracts, Bhavcopy bars, spread calculations, and backtest reports are persisting live to your Supabase PostgreSQL database."
               : "When Supabase credentials are not provided, AuricLens seamlessly operates in high-performance local demo mode with verified preloaded MCX data."}
@@ -272,43 +271,43 @@ ON CONFLICT (id) DO NOTHING;`;
         </div>
 
         {/* Database Table Counts Card */}
-        <div className="card-gradient rounded-xl border border-[#1E3E62] p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#1E3E62]/60 pb-3">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Terminal className="h-4 w-4 text-amber-400" />
+        <div className="card-gradient rounded-xl border border-[#E8E1D5] bg-white/95 p-5 space-y-4 shadow-sm">
+          <div className="flex items-center justify-between border-b border-[#E8E1D5] pb-3">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <Terminal className="h-4 w-4 text-amber-600" />
               Table Row Counts (Live Store)
             </h3>
-            <span className="text-xs text-slate-400 font-mono">Postgres Schema: public</span>
+            <span className="text-xs text-slate-500 font-mono">Postgres Schema: public</span>
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 rounded-lg bg-[#071328] border border-[#1E3E62]/60">
-              <span className="text-slate-400 block">contracts</span>
-              <span className="text-lg font-bold font-mono text-white mt-0.5 block">
+            <div className="p-3 rounded-lg bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+              <span className="text-slate-500 block">contracts</span>
+              <span className="text-lg font-bold font-mono text-slate-900 mt-0.5 block">
                 {dbStatus?.tables.contracts ?? 4}
               </span>
               <span className="text-[10px] text-slate-500">Official MCX Specs</span>
             </div>
 
-            <div className="p-3 rounded-lg bg-[#071328] border border-[#1E3E62]/60">
-              <span className="text-slate-400 block">market_data</span>
-              <span className="text-lg font-bold font-mono text-emerald-400 mt-0.5 block">
+            <div className="p-3 rounded-lg bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+              <span className="text-slate-500 block">market_data</span>
+              <span className="text-lg font-bold font-mono text-emerald-700 mt-0.5 block">
                 {dbStatus?.tables.market_data ?? 240}
               </span>
               <span className="text-[10px] text-slate-500">Bhavcopy Bars</span>
             </div>
 
-            <div className="p-3 rounded-lg bg-[#071328] border border-[#1E3E62]/60">
-              <span className="text-slate-400 block">spread_analyses</span>
-              <span className="text-lg font-bold font-mono text-amber-400 mt-0.5 block">
+            <div className="p-3 rounded-lg bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+              <span className="text-slate-500 block">spread_analyses</span>
+              <span className="text-lg font-bold font-mono text-amber-800 mt-0.5 block">
                 {dbStatus?.tables.spread_analyses ?? 0}
               </span>
               <span className="text-[10px] text-slate-500">Saved Signals</span>
             </div>
 
-            <div className="p-3 rounded-lg bg-[#071328] border border-[#1E3E62]/60">
-              <span className="text-slate-400 block">backtest_reports</span>
-              <span className="text-lg font-bold font-mono text-cyan-400 mt-0.5 block">
+            <div className="p-3 rounded-lg bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+              <span className="text-slate-500 block">backtest_reports</span>
+              <span className="text-lg font-bold font-mono text-sky-700 mt-0.5 block">
                 {dbStatus?.tables.backtest_reports ?? 0}
               </span>
               <span className="text-[10px] text-slate-500">Walk-Forward Runs</span>
@@ -318,61 +317,61 @@ ON CONFLICT (id) DO NOTHING;`;
       </div>
 
       {/* Single Copy-Paste SQL Setup Script Section */}
-      <div className="card-gradient rounded-xl border border-[#1E3E62] p-5 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#1E3E62]/60 pb-3">
+      <div className="card-gradient rounded-xl border border-[#E8E1D5] bg-white/95 p-5 space-y-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8E1D5] pb-3">
           <div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-              <h3 className="text-base font-bold text-white">Single Copy-Paste Supabase SQL Setup Script</h3>
+              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              <h3 className="text-base font-bold text-slate-900">Single Copy-Paste Supabase SQL Setup Script</h3>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5">
               Paste this once into your Supabase SQL Editor to generate all tables, foreign keys, unique indices, RLS policies, and seed data.
             </p>
           </div>
 
           <button
             onClick={copyToClipboard}
-            className="flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-amber-400 transition-colors shadow-md shadow-amber-500/20"
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2 text-xs font-bold text-white hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20"
           >
-            {copied ? <Check className="h-4 w-4 text-slate-950" /> : <Copy className="h-4 w-4 text-slate-950" />}
+            {copied ? <Check className="h-4 w-4 text-white" /> : <Copy className="h-4 w-4 text-white" />}
             <span>{copied ? "Copied SQL to Clipboard!" : "Copy SQL Script"}</span>
           </button>
         </div>
 
         {/* Step-by-Step Instructions */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
-          <div className="p-3 rounded-lg bg-[#071328] border border-[#1E3E62]">
-            <span className="font-bold text-amber-400 block mb-1">Step 1: Sign Up / Login</span>
-            <p className="text-slate-400 text-[11px]">
-              Open <a href="https://supabase.com" target="_blank" rel="noreferrer" className="text-amber-300 underline inline-flex items-center gap-0.5">supabase.com <ExternalLink className="h-2.5 w-2.5" /></a> and create a free project.
+          <div className="p-3 rounded-lg bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+            <span className="font-bold text-amber-800 block mb-1">Step 1: Sign Up / Login</span>
+            <p className="text-slate-600 text-[11px]">
+              Open <a href="https://supabase.com" target="_blank" rel="noreferrer" className="text-amber-800 underline font-medium inline-flex items-center gap-0.5">supabase.com <ExternalLink className="h-2.5 w-2.5" /></a> and create a free project.
             </p>
           </div>
 
-          <div className="p-3 rounded-lg bg-[#071328] border border-[#1E3E62]">
-            <span className="font-bold text-amber-400 block mb-1">Step 2: SQL Editor</span>
-            <p className="text-slate-400 text-[11px]">
+          <div className="p-3 rounded-lg bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+            <span className="font-bold text-amber-800 block mb-1">Step 2: SQL Editor</span>
+            <p className="text-slate-600 text-[11px]">
               Click &quot;SQL Editor&quot; on the left sidebar, click &quot;New Query&quot;, paste the copied script, and click &quot;Run&quot;.
             </p>
           </div>
 
-          <div className="p-3 rounded-lg bg-[#071328] border border-[#1E3E62]">
-            <span className="font-bold text-amber-400 block mb-1">Step 3: Copy API Keys</span>
-            <p className="text-slate-400 text-[11px]">
+          <div className="p-3 rounded-lg bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+            <span className="font-bold text-amber-800 block mb-1">Step 3: Copy API Keys</span>
+            <p className="text-slate-600 text-[11px]">
               Go to Project Settings → API. Copy your Project URL and Anon Public Key.
             </p>
           </div>
 
-          <div className="p-3 rounded-lg bg-[#071328] border border-[#1E3E62]">
-            <span className="font-bold text-amber-400 block mb-1">Step 4: Paste in .env.local</span>
-            <p className="text-slate-400 text-[11px]">
-              Paste the keys into <code className="text-slate-200">.env.local</code> and restart or reload the browser.
+          <div className="p-3 rounded-lg bg-amber-50/40 border border-[#E8E1D5] shadow-2xs">
+            <span className="font-bold text-amber-800 block mb-1">Step 4: Paste in .env.local</span>
+            <p className="text-slate-600 text-[11px]">
+              Paste the keys into <code className="text-slate-800 font-semibold bg-white px-1 py-0.5 rounded border border-[#E8E1D5]">.env.local</code> and restart or reload the browser.
             </p>
           </div>
         </div>
 
         {/* Code Preview Box */}
         <div className="relative">
-          <pre className="p-4 rounded-xl bg-[#050E1C] border border-[#1E3E62] text-[11px] font-mono text-slate-300 overflow-x-auto max-h-[320px] overflow-y-auto leading-relaxed">
+          <pre className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-200 overflow-x-auto max-h-[320px] overflow-y-auto leading-relaxed shadow-xs">
             {sqlScript}
           </pre>
         </div>

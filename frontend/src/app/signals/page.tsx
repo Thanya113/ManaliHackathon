@@ -208,18 +208,18 @@ export default function SignalsPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#1E3E62]/60 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E8E1D5] pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="rounded-full bg-amber-400/10 px-2.5 py-0.5 text-xs font-bold text-amber-300 border border-amber-400/20">
+            <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-bold text-amber-800 border border-amber-300">
               DECISION ENGINE & EVIDENCE AUDIT
             </span>
-            <span className="text-xs text-slate-400">Deterministic Rules & Verifiable Source Citations</span>
+            <span className="text-xs text-slate-500 font-medium">Deterministic Rules & Verifiable Source Citations</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
             Explainable Signals & TinyFish Evidence Agent
           </h1>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-slate-600 mt-1">
             Every candidate trade and rejection is backed by public MCX contract specifications, statutory friction models,
             and an audit trail with clickable source URLs.
           </p>
@@ -246,10 +246,10 @@ export default function SignalsPage() {
             <button
               key={f.key}
               onClick={() => setFilterType(f.key as any)}
-              className={`rounded-lg px-3 py-1.5 font-semibold border transition-all ${
+              className={`rounded-lg px-3 py-1.5 font-bold border transition-all ${
                 filterType === f.key
-                  ? "bg-amber-400/20 text-amber-300 border-amber-400/40"
-                  : "bg-[#0B1E38] text-slate-300 border-[#1E3E62] hover:bg-[#0F2647] hover:text-white"
+                  ? "bg-amber-100 text-amber-900 border-amber-300 shadow-2xs"
+                  : "bg-white text-slate-700 border-[#E8E1D5] hover:bg-amber-50/70"
               }`}
             >
               {f.label}
@@ -259,22 +259,22 @@ export default function SignalsPage() {
       </div>
 
       {/* TinyFish Evidence Agent & Regulatory Auditor Panel */}
-      <div className="rounded-xl border border-amber-500/30 bg-[#071328]/90 p-5 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#1E3E62]/60 pb-3">
+      <div className="rounded-xl border border-amber-300 bg-white/95 p-5 space-y-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8E1D5] pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="rounded-lg bg-amber-400/10 p-2 border border-amber-400/20 text-amber-400">
+            <div className="rounded-lg bg-amber-50 p-2 border border-amber-200 text-amber-700">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold text-white">TinyFish Regulatory Evidence Agent</h3>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <h3 className="text-sm font-extrabold text-slate-900">TinyFish Regulatory Evidence Agent</h3>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-300">
                   {TinyFishEvidenceAgent.isTinyFishLiveConfigured()
                     ? "TINYFISH LIVE AGENT ACTIVE"
                     : "VERIFIED REGULATORY BASELINE"}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 Continuously audits stored metadata against official MCX specifications, clearing circulars, and interest rates.
               </p>
             </div>
@@ -285,9 +285,9 @@ export default function SignalsPage() {
             <button
               onClick={handleRunContractAudit}
               disabled={isAuditingContracts}
-              className="flex items-center gap-1.5 rounded-lg bg-[#0F2647] px-3 py-1.5 font-semibold text-slate-200 border border-[#1E3E62] hover:bg-[#17355B] hover:text-white transition-all disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg bg-[#FAF8F5] px-3 py-1.5 font-bold text-slate-700 border border-[#E8E1D5] hover:bg-amber-50 hover:text-amber-900 transition-all disabled:opacity-50"
             >
-              <FileCheck className="h-3.5 w-3.5 text-amber-400" />
+              <FileCheck className="h-3.5 w-3.5 text-amber-700" />
               <span>{isAuditingContracts ? "Auditing Specs..." : "Audit Contract Specs"}</span>
             </button>
 
@@ -295,16 +295,16 @@ export default function SignalsPage() {
             <button
               onClick={handleQueryTinyFish}
               disabled={isQueryingTinyFish}
-              className="flex items-center gap-1.5 rounded-lg bg-amber-500/20 px-3 py-1.5 font-bold text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition-all disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg bg-amber-500/15 px-3 py-1.5 font-bold text-amber-900 border border-amber-300 hover:bg-amber-500/25 transition-all disabled:opacity-50 shadow-2xs"
             >
-              <RefreshCw className={`h-3.5 w-3.5 text-amber-400 ${isQueryingTinyFish ? "animate-spin" : ""}`} />
+              <RefreshCw className={`h-3.5 w-3.5 text-amber-700 ${isQueryingTinyFish ? "animate-spin" : ""}`} />
               <span>{isQueryingTinyFish ? "Querying Agent..." : "Query Public MCX Notices"}</span>
             </button>
 
             {/* Toggle Panel Collapse */}
             <button
               onClick={() => setShowEvidencePanel(!showEvidencePanel)}
-              className="rounded-lg bg-[#0B1E38] px-2.5 py-1.5 text-slate-400 hover:text-white border border-[#1E3E62]"
+              className="rounded-lg bg-white px-2.5 py-1.5 text-slate-600 hover:text-slate-900 border border-[#E8E1D5]"
             >
               {showEvidencePanel ? "Hide Evidence" : "View Evidence (8)"}
             </button>
@@ -313,18 +313,18 @@ export default function SignalsPage() {
 
         {/* Status Notice Banner (if any) */}
         {tinyFishStatusNotice && (
-          <div className="p-3 rounded-lg bg-[#0B1E38] border border-amber-500/30 text-xs text-amber-200 flex items-start gap-2">
-            <Info className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
-            <span className="leading-relaxed">{tinyFishStatusNotice}</span>
+          <div className="p-3 rounded-lg bg-amber-50/80 border border-amber-300 text-xs text-amber-900 flex items-start gap-2 shadow-2xs">
+            <Info className="h-4 w-4 text-amber-700 shrink-0 mt-0.5" />
+            <span className="leading-relaxed font-medium">{tinyFishStatusNotice}</span>
           </div>
         )}
 
         {/* Discrepancy Detection Interactive Demo Simulator */}
-        <div className="rounded-lg bg-[#0B1E38]/90 p-3.5 border border-[#1E3E62] space-y-3">
+        <div className="rounded-lg bg-[#FAF8F5] p-3.5 border border-[#E8E1D5] space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-amber-400" />
-              <span className="font-semibold text-slate-200">Interactive Discrepancy Auditor Simulator</span>
+              <AlertTriangle className="h-4 w-4 text-amber-700" />
+              <span className="font-bold text-slate-800">Interactive Discrepancy Auditor Simulator</span>
             </div>
 
             <button
@@ -332,15 +332,15 @@ export default function SignalsPage() {
                 setSimulateDiscrepancy(!simulateDiscrepancy);
                 setTimeout(handleRunContractAudit, 50);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-semibold border transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold border transition-all ${
                 simulateDiscrepancy
-                  ? "bg-rose-500/20 text-rose-300 border-rose-500/40"
-                  : "bg-[#071328] text-slate-300 border-[#1E3E62] hover:text-white"
+                  ? "bg-rose-100 text-rose-900 border-rose-300 shadow-2xs"
+                  : "bg-white text-slate-700 border-[#E8E1D5] hover:bg-amber-50"
               }`}
             >
               {simulateDiscrepancy ? (
                 <>
-                  <ToggleRight className="h-4 w-4 text-rose-400" />
+                  <ToggleRight className="h-4 w-4 text-rose-600" />
                   <span>Simulate Outdated Tender Window (ACTIVE)</span>
                 </>
               ) : (
@@ -352,46 +352,46 @@ export default function SignalsPage() {
             </button>
           </div>
 
-          <p className="text-[11px] text-slate-400 leading-relaxed">
+          <p className="text-[11px] text-slate-600 leading-relaxed">
             Tests how the Evidence Agent detects divergences between local application metadata and official exchange publications.
             When enabled, the auditor simulates an outdated 3-day tender period in `GOLD` vs official 5 days and flags it immediately.
           </p>
 
           {/* Discrepancy Results Banner */}
           {auditDiscrepancies.length > 0 ? (
-            <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 space-y-1.5">
-              <div className="flex items-center gap-2 text-rose-300 font-bold text-xs">
-                <AlertOctagon className="h-4 w-4" />
+            <div className="p-3 rounded-lg bg-rose-50 border border-rose-300 space-y-1.5 shadow-2xs">
+              <div className="flex items-center gap-2 text-rose-900 font-extrabold text-xs">
+                <AlertOctagon className="h-4 w-4 text-rose-600" />
                 <span>DISCREPANCY FLAGGED FOR REVIEW ({auditDiscrepancies.length}):</span>
               </div>
-              <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-300">
+              <ul className="list-disc list-inside space-y-1 text-[11px] text-rose-900">
                 {auditDiscrepancies.map((d, i) => (
                   <li key={i} className="leading-relaxed">
-                    <span className="text-rose-200 font-semibold">{d}</span>
+                    <span className="font-bold">{d}</span>
                   </li>
                 ))}
               </ul>
-              <div className="text-[10px] text-slate-400 pt-1">
+              <div className="text-[10px] text-slate-600 pt-1">
                 Risk Policy: System automatically adheres to conservative exchange-verified parameters for spread margin and delivery guardrails.
               </div>
             </div>
           ) : (
-            <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[11px] text-emerald-300 flex items-center justify-between">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+            <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-900 flex items-center justify-between shadow-2xs">
+              <span className="flex items-center gap-1.5 font-semibold">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                 <span>All 4 stored MCX contract specifications (GOLD, GOLDM, GOLDGUINEA, GOLDPETAL) match official exchange circulars 100%.</span>
               </span>
-              <span className="font-mono text-[10px] text-slate-400">Zero Discrepancies</span>
+              <span className="font-mono text-[10px] text-emerald-800 font-bold">Zero Discrepancies</span>
             </div>
           )}
         </div>
 
         {/* Expanded Evidence Records Viewer */}
         {showEvidencePanel && (
-          <div className="space-y-3 pt-2 border-t border-[#1E3E62]/60">
+          <div className="space-y-3 pt-2 border-t border-[#E8E1D5]">
             {/* Category Filter Pills */}
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-              <span className="font-semibold text-slate-300">Public Regulatory Knowledge Base ({filteredEvidence.length} items):</span>
+              <span className="font-bold text-slate-700">Public Regulatory Knowledge Base ({filteredEvidence.length} items):</span>
               <div className="flex flex-wrap gap-1">
                 {[
                   { key: "ALL", label: "All Sources" },
@@ -403,10 +403,10 @@ export default function SignalsPage() {
                   <button
                     key={c.key}
                     onClick={() => setEvidenceCategoryFilter(c.key)}
-                    className={`px-2.5 py-1 rounded text-[11px] font-semibold border transition-all ${
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold border transition-all ${
                       evidenceCategoryFilter === c.key
-                        ? "bg-amber-400/20 text-amber-300 border-amber-400/40"
-                        : "bg-[#0B1E38] text-slate-400 border-transparent hover:text-slate-200"
+                        ? "bg-amber-100 text-amber-900 border-amber-300"
+                        : "bg-white text-slate-600 border-[#E8E1D5] hover:bg-amber-50"
                     }`}
                   >
                     {c.label}
@@ -420,27 +420,27 @@ export default function SignalsPage() {
               {filteredEvidence.map((ev) => (
                 <div
                   key={ev.id}
-                  className="p-3 rounded-lg bg-[#0B1E38]/70 border border-[#1E3E62] space-y-1.5 text-xs"
+                  className="p-3.5 rounded-lg bg-white border border-[#E8E1D5] shadow-xs space-y-1.5 text-xs"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-400/10 text-amber-300 border border-amber-400/20">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
                       {ev.category}
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                      <CheckCircle2 className="h-3 w-3" /> {ev.status}
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3 text-emerald-600" /> {ev.status}
                     </span>
                   </div>
 
-                  <h4 className="font-bold text-slate-200 text-xs">{ev.title}</h4>
-                  <p className="text-[11px] text-slate-300 leading-relaxed">{ev.extracted_fact}</p>
+                  <h4 className="font-extrabold text-slate-900 text-xs">{ev.title}</h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">{ev.extracted_fact}</p>
 
-                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-[#1E3E62]/40 text-[10px] text-slate-400">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-[#E8E1D5] text-[10px] text-slate-500">
                     <span className="truncate max-w-[200px]">Source: {ev.source_name}</span>
                     <a
                       href={ev.source_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-amber-400 hover:text-amber-300 underline font-medium"
+                      className="flex items-center gap-1 text-amber-700 hover:text-amber-800 underline font-bold"
                     >
                       <span>Official Source</span>
                       <ExternalLink className="h-3 w-3" />
@@ -454,27 +454,27 @@ export default function SignalsPage() {
       </div>
 
       {/* Institutional Filter Principles Banner */}
-      <div className="rounded-xl border border-[#1E3E62] bg-[#071328]/80 p-4 text-xs space-y-2">
-        <div className="font-semibold text-slate-200 flex items-center gap-1.5">
-          <ShieldCheck className="h-4 w-4 text-emerald-400" />
+      <div className="rounded-xl border border-[#E8E1D5] bg-white p-4 text-xs space-y-2 shadow-xs">
+        <div className="font-bold text-slate-800 flex items-center gap-1.5">
+          <ShieldCheck className="h-4 w-4 text-emerald-600" />
           <span>AuricLens 4-Stage Quantitative Gateways</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-[11px] pt-1">
-          <div className="p-2.5 rounded bg-[#0B1E38] border border-[#1E3E62]/60">
-            <span className="font-bold text-amber-400 block">1. Statistical Z-Score</span>
-            <span className="text-slate-400">Requires |Z| ≥ 1.80σ deviation from 20-day rolling mean to trigger candidate spread.</span>
+          <div className="p-3 rounded-lg bg-[#FAF8F5] border border-[#E8E1D5]">
+            <span className="font-bold text-amber-800 block">1. Statistical Z-Score</span>
+            <span className="text-slate-600">Requires |Z| ≥ 1.80σ deviation from 20-day rolling mean to trigger candidate spread.</span>
           </div>
-          <div className="p-2.5 rounded bg-[#0B1E38] border border-[#1E3E62]/60">
-            <span className="font-bold text-amber-400 block">2. Friction Hurdle</span>
-            <span className="text-slate-400">Gross spread edge must exceed 2.0x total round-trip statutory costs & slippage.</span>
+          <div className="p-3 rounded-lg bg-[#FAF8F5] border border-[#E8E1D5]">
+            <span className="font-bold text-amber-800 block">2. Friction Hurdle</span>
+            <span className="text-slate-600">Gross spread edge must exceed 2.0x total round-trip statutory costs & slippage.</span>
           </div>
-          <div className="p-2.5 rounded bg-[#0B1E38] border border-[#1E3E62]/60">
-            <span className="font-bold text-amber-400 block">3. Tender Period Buffer</span>
-            <span className="text-slate-400">Strictly blocks entries within 5 trading days of expiry to eliminate compulsory physical delivery.</span>
+          <div className="p-3 rounded-lg bg-[#FAF8F5] border border-[#E8E1D5]">
+            <span className="font-bold text-amber-800 block">3. Tender Period Buffer</span>
+            <span className="text-slate-600">Strictly blocks entries within 5 trading days of expiry to eliminate compulsory physical delivery.</span>
           </div>
-          <div className="p-2.5 rounded bg-[#0B1E38] border border-[#1E3E62]/60">
-            <span className="font-bold text-amber-400 block">4. Liquidity Minimums</span>
-            <span className="text-slate-400">Enforces minimum 100 lots open interest & 50 lots daily volume on the deferred leg.</span>
+          <div className="p-3 rounded-lg bg-[#FAF8F5] border border-[#E8E1D5]">
+            <span className="font-bold text-amber-800 block">4. Liquidity Minimums</span>
+            <span className="text-slate-600">Enforces minimum 100 lots open interest & 50 lots daily volume on the deferred leg.</span>
           </div>
         </div>
       </div>
