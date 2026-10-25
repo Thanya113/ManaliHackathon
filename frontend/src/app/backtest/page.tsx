@@ -129,7 +129,7 @@ export default function BacktestPage() {
             <h3 className="text-sm font-bold text-white">Strategy Hyperparameters & Cost Friction Model</h3>
           </div>
           <span className="text-xs text-slate-400 font-mono">
-            Capital: <span className="text-amber-300 font-bold">₹{config.initial_capital.toLocaleString()}</span>
+            Capital: <span suppressHydrationWarning className="text-amber-300 font-bold">₹{config.initial_capital.toLocaleString("en-IN")}</span>
           </span>
         </div>
 
