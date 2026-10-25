@@ -119,8 +119,16 @@ CREATE TABLE IF NOT EXISTS public.spread_analyses (
     net_expected_edge NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
     confidence_score INTEGER NOT NULL DEFAULT 0,
     thesis TEXT,
+    is_trade_candidate BOOLEAN DEFAULT FALSE,
+    audit_trail JSONB,
+    evidence_ids TEXT[],
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Migration safety for existing tables
+ALTER TABLE public.spread_analyses ADD COLUMN IF NOT EXISTS is_trade_candidate BOOLEAN DEFAULT FALSE;
+ALTER TABLE public.spread_analyses ADD COLUMN IF NOT EXISTS audit_trail JSONB;
+ALTER TABLE public.spread_analyses ADD COLUMN IF NOT EXISTS evidence_ids TEXT[];
 
 CREATE INDEX IF NOT EXISTS idx_spread_analyses_pair_date ON public.spread_analyses(pair_key, valuation_date DESC);
 CREATE INDEX IF NOT EXISTS idx_spread_analyses_action ON public.spread_analyses(action);
@@ -161,12 +169,37 @@ CREATE INDEX IF NOT EXISTS idx_backtest_reports_pair ON public.backtest_reports(
 CREATE INDEX IF NOT EXISTS idx_backtest_reports_created ON public.backtest_reports(created_at DESC);
 
 -- ------------------------------------------------------------------------------
--- 5. ROW LEVEL SECURITY (RLS) & PUBLIC DEMO POLICIES
+-- 5. EVIDENCE_RECORDS TABLE: TinyFish Public Regulatory Facts & Discrepancies
+-- ------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.evidence_records (
+    id TEXT PRIMARY KEY,                              -- e.g. 'mcx-gold-spec-1kg'
+    claim_key TEXT NOT NULL,
+    category TEXT NOT NULL,                           -- 'CONTRACT_SPEC' | 'TENDER_NOTICE' | 'EXPIRY_SCHEDULE' | 'MACRO_RATE' | 'REGULATORY_RULE'
+    extracted_fact TEXT NOT NULL,
+    extracted_value TEXT,
+    stored_value TEXT,
+    has_discrepancy BOOLEAN NOT NULL DEFAULT FALSE,
+    discrepancy_details TEXT,
+    source_name TEXT NOT NULL,
+    source_url TEXT NOT NULL,
+    status TEXT NOT NULL,                             -- 'VERIFIED_SOURCE_FACT' | 'CALCULATED_RESULT' | 'HYPOTHESIS' | 'STALE_OR_MISSING' | 'SYNTHETIC_DEMO'
+    published_at TIMESTAMPTZ,
+    retrieved_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    agent_engine TEXT NOT NULL DEFAULT 'TINYFISH_LIVE',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_evidence_records_category ON public.evidence_records(category);
+CREATE INDEX IF NOT EXISTS idx_evidence_records_status ON public.evidence_records(status);
+
+-- ------------------------------------------------------------------------------
+-- 6. ROW LEVEL SECURITY (RLS) & PUBLIC DEMO POLICIES
 -- ------------------------------------------------------------------------------
 ALTER TABLE public.contracts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.market_data ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.spread_analyses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.backtest_reports ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.evidence_records ENABLE ROW LEVEL SECURITY;
 
 -- Allow anonymous read access
 DROP POLICY IF EXISTS "Allow public read on contracts" ON public.contracts;
@@ -180,6 +213,9 @@ CREATE POLICY "Allow public read on spread_analyses" ON public.spread_analyses F
 
 DROP POLICY IF EXISTS "Allow public read on backtest_reports" ON public.backtest_reports;
 CREATE POLICY "Allow public read on backtest_reports" ON public.backtest_reports FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Allow public read on evidence_records" ON public.evidence_records;
+CREATE POLICY "Allow public read on evidence_records" ON public.evidence_records FOR SELECT USING (true);
 
 -- Allow anonymous/demo write access (insert/update/delete) for testing and app operations
 DROP POLICY IF EXISTS "Allow public insert on contracts" ON public.contracts;
@@ -208,6 +244,15 @@ CREATE POLICY "Allow public insert on backtest_reports" ON public.backtest_repor
 
 DROP POLICY IF EXISTS "Allow public delete on backtest_reports" ON public.backtest_reports;
 CREATE POLICY "Allow public delete on backtest_reports" ON public.backtest_reports FOR DELETE USING (true);
+
+DROP POLICY IF EXISTS "Allow public insert on evidence_records" ON public.evidence_records;
+CREATE POLICY "Allow public insert on evidence_records" ON public.evidence_records FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow public update on evidence_records" ON public.evidence_records;
+CREATE POLICY "Allow public update on evidence_records" ON public.evidence_records FOR UPDATE USING (true);
+
+DROP POLICY IF EXISTS "Allow public delete on evidence_records" ON public.evidence_records;
+CREATE POLICY "Allow public delete on evidence_records" ON public.evidence_records FOR DELETE USING (true);
 
 -- ------------------------------------------------------------------------------
 -- 6. PRE-SEED OFFICIAL MCX GOLD CONTRACT SPECIFICATIONS

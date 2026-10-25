@@ -1,12 +1,14 @@
-import { BacktestReport, BhavcopyRecord, CalendarSpreadResult, MCXContract, MCXSymbol } from "../types";
+import { BacktestReport, BhavcopyRecord, CalendarSpreadResult, MCXContract, MCXSymbol, EvidenceRecord, EvidenceCategory } from "../types";
 import { getSupabaseClient, isSupabaseConfigured } from "./client";
 import { MCX_GOLD_SPECS } from "../quant/specs";
 import { BhavcopyParser } from "../quant/bhavcopy";
+import { TinyFishEvidenceAgent } from "../quant/tinyfish";
 
 export class StorageService {
   private static localMarketData: BhavcopyRecord[] = [];
   private static localAnalyses: CalendarSpreadResult[] = [];
   private static localBacktests: BacktestReport[] = [];
+  private static localEvidence: EvidenceRecord[] = [];
 
   // ============================================================================
   // CONTRACTS CRUD
@@ -295,6 +297,9 @@ export class StorageService {
           net_expected_edge: analysis.net_expected_edge,
           confidence_score: analysis.confidence_score,
           thesis: analysis.thesis,
+          is_trade_candidate: analysis.is_trade_candidate ?? (analysis.action !== "NO_TRADE"),
+          audit_trail: analysis.audit_trail ?? null,
+          evidence_ids: analysis.evidence_ids ?? [],
         };
         const { error } = await supabase.from("spread_analyses").insert(payload);
         if (!error) return true;
@@ -383,6 +388,65 @@ export class StorageService {
   }
 
   // ============================================================================
+  // EVIDENCE RECORDS CRUD (TinyFish Evidence Agent)
+  // ============================================================================
+
+  public static async getEvidenceRecords(category?: EvidenceCategory): Promise<EvidenceRecord[]> {
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      try {
+        let query = supabase.from("evidence_records").select("*").order("created_at", { ascending: false });
+        if (category) query = query.eq("category", category);
+
+        const { data, error } = await query;
+        if (!error && data && data.length > 0) {
+          return data as EvidenceRecord[];
+        }
+      } catch (err) {
+        console.warn("Supabase getEvidenceRecords fallback:", err);
+      }
+    }
+
+    if (this.localEvidence.length === 0) {
+      this.localEvidence = [...TinyFishEvidenceAgent.OFFICIAL_BASELINE_EVIDENCE];
+    }
+
+    if (category) {
+      return this.localEvidence.filter((e) => e.category === category);
+    }
+    return this.localEvidence;
+  }
+
+  public static async saveEvidenceRecord(record: EvidenceRecord): Promise<boolean> {
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      try {
+        const { error } = await supabase.from("evidence_records").upsert(record);
+        if (!error) return true;
+      } catch (err) {
+        console.warn("Supabase saveEvidenceRecord error:", err);
+      }
+    }
+
+    const idx = this.localEvidence.findIndex((e) => e.id === record.id);
+    if (idx !== -1) {
+      this.localEvidence[idx] = record;
+    } else {
+      this.localEvidence.unshift(record);
+    }
+    return true;
+  }
+
+  public static async saveEvidenceRecords(records: EvidenceRecord[]): Promise<{ saved: number }> {
+    let saved = 0;
+    for (const r of records) {
+      const ok = await this.saveEvidenceRecord(r);
+      if (ok) saved++;
+    }
+    return { saved };
+  }
+
+  // ============================================================================
   // HEALTH & DIAGNOSTICS
   // ============================================================================
 
@@ -394,6 +458,7 @@ export class StorageService {
       market_data: number;
       spread_analyses: number;
       backtest_reports: number;
+      evidence_records: number;
     };
     error: string | null;
   }> {
@@ -407,6 +472,7 @@ export class StorageService {
           market_data: this.localMarketData.length || 240,
           spread_analyses: this.localAnalyses.length,
           backtest_reports: this.localBacktests.length,
+          evidence_records: this.localEvidence.length || TinyFishEvidenceAgent.OFFICIAL_BASELINE_EVIDENCE.length,
         },
         error: "Supabase credentials not configured in environment (using local high-performance cache).",
       };
@@ -417,24 +483,25 @@ export class StorageService {
       return {
         configured: true,
         connected: false,
-        tables: { contracts: 0, market_data: 0, spread_analyses: 0, backtest_reports: 0 },
+        tables: { contracts: 0, market_data: 0, spread_analyses: 0, backtest_reports: 0, evidence_records: 0 },
         error: "Failed to initialize Supabase client.",
       };
     }
 
     try {
-      const [cRes, mRes, sRes, bRes] = await Promise.all([
+      const [cRes, mRes, sRes, bRes, eRes] = await Promise.all([
         supabase.from("contracts").select("id", { count: "exact", head: true }),
         supabase.from("market_data").select("id", { count: "exact", head: true }),
         supabase.from("spread_analyses").select("id", { count: "exact", head: true }),
         supabase.from("backtest_reports").select("id", { count: "exact", head: true }),
+        supabase.from("evidence_records").select("id", { count: "exact", head: true }),
       ]);
 
       if (cRes.error) {
         return {
           configured: true,
           connected: false,
-          tables: { contracts: 0, market_data: 0, spread_analyses: 0, backtest_reports: 0 },
+          tables: { contracts: 0, market_data: 0, spread_analyses: 0, backtest_reports: 0, evidence_records: 0 },
           error: `Table check failed: ${cRes.error.message}. Please run supabase_schema.sql in your Supabase SQL editor.`,
         };
       }
@@ -447,6 +514,7 @@ export class StorageService {
           market_data: mRes.count || 0,
           spread_analyses: sRes.count || 0,
           backtest_reports: bRes.count || 0,
+          evidence_records: eRes?.count || 0,
         },
         error: null,
       };
@@ -455,7 +523,7 @@ export class StorageService {
       return {
         configured: true,
         connected: false,
-        tables: { contracts: 0, market_data: 0, spread_analyses: 0, backtest_reports: 0 },
+        tables: { contracts: 0, market_data: 0, spread_analyses: 0, backtest_reports: 0, evidence_records: 0 },
         error: msg,
       };
     }

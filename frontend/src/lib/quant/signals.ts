@@ -1,8 +1,20 @@
 import { CalendarSpreadResult, TransactionCostBreakdown } from "../types";
 import { CostModel } from "./costModel";
-import { DEFAULT_QUANT_CONFIG } from "./specs";
+import { DEFAULT_QUANT_CONFIG, MCX_GOLD_SPECS } from "./specs";
+import { TinyFishEvidenceAgent } from "./tinyfish";
 
 export class SignalEngine {
+  private static finalizeSignal(updated: CalendarSpreadResult): CalendarSpreadResult {
+    const c1 = MCX_GOLD_SPECS[updated.leg1_symbol];
+    const c2 = MCX_GOLD_SPECS[updated.leg2_symbol];
+    updated.is_trade_candidate = updated.action === "LONG_SPREAD" || updated.action === "SHORT_SPREAD";
+    if (c1 && c2) {
+      updated.audit_trail = TinyFishEvidenceAgent.buildAuditTrail(updated, c1, c2);
+      updated.evidence_ids = updated.audit_trail.verified_source_facts.map((f) => f.id);
+    }
+    return updated;
+  }
+
   public static evaluateSignal(
     spreadData: CalendarSpreadResult,
     zScore: number,
@@ -36,8 +48,9 @@ export class SignalEngine {
       updated.net_expected_edge = 0.0;
       updated.thesis = "Safety Guardrail: Execution blocked due to physical delivery tender period proximity.";
       updated.confidence_score = 0;
-      return updated;
+      return this.finalizeSignal(updated);
     }
+
 
     // Filter 2: Liquidity Buffer Check
     if (spreadData.leg2_oi < DEFAULT_QUANT_CONFIG.min_next_oi) {
@@ -52,7 +65,7 @@ export class SignalEngine {
       updated.net_expected_edge = 0.0;
       updated.thesis = "Safety Guardrail: Low market depth prevents reliable two-way order execution.";
       updated.confidence_score = 0;
-      return updated;
+      return this.finalizeSignal(updated);
     }
 
     const dislocation = spreadData.dislocation_abs;
@@ -76,11 +89,11 @@ export class SignalEngine {
         updated.net_expected_edge = netEdge;
         updated.thesis = "Sub-economic edge: Round-trip statutory and slippage frictions exceed the expected statistical alpha.";
         updated.confidence_score = 25;
-        return updated;
+        return this.finalizeSignal(updated);
       }
 
       updated.action = "SHORT_SPREAD";
-      updated.badge = "SHORT SPREAD";
+      updated.badge = "TRADE CANDIDATE: SHORT SPREAD";
       updated.badge_color = "rose";
       updated.direction = "SELL_DEFERRED_BUY_FRONT";
       updated.status = "ACTIONABLE";
@@ -93,7 +106,7 @@ export class SignalEngine {
       updated.stop_spread = Math.round((spreadAbs + frictionPer10g * 1.5) * 100) / 100;
       updated.thesis = `Implied carry rate (${spreadData.implied_carry_rate_pct}% p.a.) trades well above theoretical cost of carry. Quantitative thesis: Sell ${spreadData.leg2_symbol} (${spreadData.leg2_expiry}) and Buy ${spreadData.leg1_symbol} (${spreadData.leg1_expiry}) targeting spread compression to fair value.`;
       updated.confidence_score = Math.min(95, Math.round(70 + (Math.abs(zScore) - 1.8) * 15));
-      return updated;
+      return this.finalizeSignal(updated);
     }
 
     // Signal Case 2: LONG SPREAD (Underpriced Spread / Backwardation Reversion)
@@ -114,11 +127,11 @@ export class SignalEngine {
         updated.net_expected_edge = netEdge;
         updated.thesis = "Sub-economic edge: Statistical dislocation does not sufficiently compensate for exchange friction.";
         updated.confidence_score = 25;
-        return updated;
+        return this.finalizeSignal(updated);
       }
 
       updated.action = "LONG_SPREAD";
-      updated.badge = "LONG SPREAD";
+      updated.badge = "TRADE CANDIDATE: LONG SPREAD";
       updated.badge_color = "emerald";
       updated.direction = "BUY_DEFERRED_SELL_FRONT";
       updated.status = "ACTIONABLE";
@@ -131,7 +144,7 @@ export class SignalEngine {
       updated.stop_spread = Math.round((spreadAbs - frictionPer10g * 1.5) * 100) / 100;
       updated.thesis = `Normalized spread (₹${spreadAbs}/10g, ${spreadData.implied_carry_rate_pct}% carry) is compressed below theoretical carry. Quantitative thesis: Buy ${spreadData.leg2_symbol} (${spreadData.leg2_expiry}) and Sell ${spreadData.leg1_symbol} (${spreadData.leg1_expiry}) targeting expansion back to carry equilibrium.`;
       updated.confidence_score = Math.min(95, Math.round(70 + (Math.abs(zScore) - 1.8) * 15));
-      return updated;
+      return this.finalizeSignal(updated);
     }
 
     // Default Equilibrium: NO TRADE
@@ -146,6 +159,7 @@ export class SignalEngine {
     updated.net_expected_edge = 0.0;
     updated.thesis = "Market pricing is consistent with fair carry; standing aside in cash.";
     updated.confidence_score = 10;
-    return updated;
+    return this.finalizeSignal(updated);
   }
 }
+

@@ -244,6 +244,19 @@ export default function DataPage() {
     }
   };
 
+  const handleSimulateDataQualityFailure = () => {
+    setFormSymbol("GOLD");
+    setFormTradeDate("2025-05-15");
+    setFormExpiryDate("2025-05-01"); // Inverted: Expiry < Trade Date!
+    setFormClosePrice("88500");
+    setFormHighPrice("87000"); // Inverted: High < Low!
+    setFormLowPrice("89000");
+    setFormSuccess(null);
+    setFormError(
+      "VALIDATION QUARANTINE TRIGGERED: Contract Expiry Date (2025-05-01) cannot be earlier than Trade Date (2025-05-15), and High Price (₹87,000) cannot be strictly lower than Low Price (₹89,000). Record quarantined to prevent benchmark data corruption."
+    );
+  };
+
   // Filter records
   const filteredRecords = records.filter((r) => {
     if (selectedSymbol !== "ALL" && r.symbol !== selectedSymbol) return false;
@@ -363,7 +376,6 @@ export default function DataPage() {
           <span className="text-slate-400">
             Status: <span className="text-emerald-400 font-semibold">Active &amp; Connected</span>
           </span>
-
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -380,27 +392,39 @@ export default function DataPage() {
 
       {/* FORM: DIRECT SUPABASE RECORD ENTRY */}
       <div className="card-gradient rounded-xl border border-amber-400/30 p-5 shadow-lg shadow-black/40">
-        <div className="flex items-center justify-between border-b border-[#1E3E62]/60 pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1E3E62]/60 pb-3">
           <div className="flex items-center gap-2">
             <PlusCircle className="h-4 w-4 text-amber-400" />
             <h2 className="text-base font-bold text-white">
               Add Gold Futures Price Record (Direct Supabase Insert)
             </h2>
           </div>
-          <button
-            onClick={() => setShowAddForm(!showAddForm)}
-            className="text-xs text-slate-400 hover:text-amber-300 flex items-center gap-1"
-          >
-            {showAddForm ? (
-              <>
-                <span>Hide Form</span> <ChevronUp className="h-3.5 w-3.5" />
-              </>
-            ) : (
-              <>
-                <span>Show Form</span> <ChevronDown className="h-3.5 w-3.5" />
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              id="btn-test-quarantine"
+              onClick={handleSimulateDataQualityFailure}
+              className="rounded-lg bg-rose-500/15 border border-rose-500/30 px-2.5 py-1 text-xs text-rose-300 hover:bg-rose-500/25 flex items-center gap-1 font-semibold transition-colors"
+              title="Test validation guardrails by attempting to inject invalid data"
+            >
+              <AlertTriangle className="h-3.5 w-3.5 text-rose-400" />
+              <span>Simulate Quality Failure (Test Quarantine)</span>
+            </button>
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="text-xs text-slate-400 hover:text-amber-300 flex items-center gap-1"
+            >
+              {showAddForm ? (
+                <>
+                  <span>Hide Form</span> <ChevronUp className="h-3.5 w-3.5" />
+                </>
+              ) : (
+                <>
+                  <span>Show Form</span> <ChevronDown className="h-3.5 w-3.5" />
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {showAddForm && (

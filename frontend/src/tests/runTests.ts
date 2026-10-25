@@ -13,6 +13,7 @@ import { SignalEngine } from "../lib/quant/signals";
 import { BhavcopyParser } from "../lib/quant/bhavcopy";
 import { WalkForwardBacktester } from "../lib/quant/backtester";
 import { StorageService } from "../lib/supabase/service";
+import { TinyFishEvidenceAgent } from "../lib/quant/tinyfish";
 import { BhavcopyRecord, BacktestConfig } from "../types";
 
 let passedCount = 0;
@@ -201,6 +202,48 @@ async function runTestSuite() {
   const dbDiag = await StorageService.testDatabaseConnection();
   assert(dbDiag !== null, "Database diagnostic executed cleanly without crashing");
   assert(typeof dbDiag.tables.contracts === "number", "Contract table check functional");
+
+  // --------------------------------------------------------------------------
+  // TEST GROUP 8: TinyFish Evidence Agent & Regulatory Discrepancy Auditor
+  // --------------------------------------------------------------------------
+  console.log("\n[8] Testing TinyFish Evidence Agent & Regulatory Discrepancy Auditor...");
+
+  // 8a. Baseline official evidence check
+  const evidenceList = TinyFishEvidenceAgent.OFFICIAL_BASELINE_EVIDENCE;
+  assert(evidenceList.length >= 8, `Official regulatory evidence loaded: ${evidenceList.length} authoritative records`);
+  assert(
+    evidenceList.every(
+      (e) => e.source_url.startsWith("https://") && (e.status === "VERIFIED_SOURCE_FACT" || e.status === "HYPOTHESIS")
+    ),
+    "All evidence records contain verified HTTPS URLs and proper status separation (facts vs hypotheses)"
+  );
+
+  // 8b. Clean contract audit against verified evidence
+  const goldContract = MCX_GOLD_SPECS["GOLD"];
+  const cleanAudit = TinyFishEvidenceAgent.auditContractAgainstEvidence(goldContract, evidenceList);
+  assert(cleanAudit.discrepancies.length === 0, "Official MCX GOLD contract specification matches official evidence with 0 discrepancies");
+
+  // 8c. Intentional discrepancy detection (simulated outdated contract)
+  const modifiedContract = { ...goldContract, tender_period_days: 3 }; // altered from official 5 days
+  const flaggedAudit = TinyFishEvidenceAgent.auditContractAgainstEvidence(modifiedContract, evidenceList);
+  assert(
+    flaggedAudit.discrepancies.length > 0 && flaggedAudit.discrepancies[0].includes("Tender period"),
+    `Evidence Agent successfully flags specification discrepancy: "${flaggedAudit.discrepancies[0]}"`
+  );
+
+  // 8d. Audit trail generation for candidate signals
+  const auditTrail = TinyFishEvidenceAgent.buildAuditTrail(
+    spreadResult,
+    MCX_GOLD_SPECS["GOLD"],
+    MCX_GOLD_SPECS["GOLD"]
+  );
+  assert(auditTrail.verified_source_facts.length >= 3, `Audit trail includes ${auditTrail.verified_source_facts.length} verified facts`);
+  assert(auditTrail.calculated_results.length >= 4, `Audit trail documents ${auditTrail.calculated_results.length} deterministic calculation formulas`);
+  assert(auditTrail.hypotheses_and_assumptions.length >= 3, "Audit trail separates economic hypotheses (repo rate, vaulting)");
+  assert(
+    typeof auditTrail.rejection_or_candidate_audit.hurdle_passed === "boolean",
+    "Audit trail includes complete hurdle validation matrix"
+  );
 
   // --------------------------------------------------------------------------
   // SUMMARY

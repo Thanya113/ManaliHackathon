@@ -119,6 +119,75 @@ export interface CalendarSpreadResult {
   thesis: string;
   confidence_score: number;
   costs?: TransactionCostBreakdown;
+  is_trade_candidate?: boolean;
+  audit_trail?: SignalAuditTrail;
+  evidence_ids?: string[];
+}
+
+export type EvidenceStatus =
+  | "VERIFIED_SOURCE_FACT"
+  | "CALCULATED_RESULT"
+  | "HYPOTHESIS"
+  | "STALE_OR_MISSING"
+  | "SYNTHETIC_DEMO";
+
+export type EvidenceCategory =
+  | "CONTRACT_SPEC"
+  | "TENDER_NOTICE"
+  | "EXPIRY_SCHEDULE"
+  | "MACRO_RATE"
+  | "REGULATORY_RULE";
+
+export interface EvidenceRecord {
+  id: string;
+  category: EvidenceCategory;
+  claim_key: string;
+  title: string;
+  extracted_fact: string;
+  extracted_value: string;
+  stored_value?: string;
+  has_discrepancy: boolean;
+  discrepancy_details?: string;
+  status: EvidenceStatus;
+  source_name: string;
+  source_url: string;
+  published_at: string;
+  retrieved_at: string;
+  raw_snippet?: string;
+  agent_engine: "TINYFISH_LIVE" | "VERIFIED_REGULATORY_BASELINE";
+}
+
+export interface SignalAuditTrail {
+  decision: "TRADE_CANDIDATE" | "NO_TRADE";
+  verified_source_facts: EvidenceRecord[];
+  calculated_results: {
+    name: string;
+    value: string | number;
+    formula: string;
+    deterministic: boolean;
+  }[];
+  hypotheses_and_assumptions: {
+    parameter: string;
+    assumed_value: string | number;
+    source_rationale: string;
+    sensitivity: string;
+  }[];
+  rejection_or_candidate_audit: {
+    decision: "TRADE_CANDIDATE" | "NO_TRADE";
+    hurdle_passed: boolean;
+    failing_hurdle?: string;
+    risk_checks: {
+      tender_window_check: "PASS" | "FAIL";
+      liquidity_oi_check: "PASS" | "FAIL";
+      friction_hurdle_check: "PASS" | "FAIL";
+      statistical_significance_check: "PASS" | "FAIL";
+    };
+  };
+  provenance_summary: {
+    market_data_source: "MCX_BHAVCOPY" | "MANUAL_CSV" | "DEMO_DATA";
+    evidence_engine: "TINYFISH_LIVE" | "VERIFIED_REGULATORY_BASELINE";
+    timestamp: string;
+  };
 }
 
 export interface AnomalyAlert {
